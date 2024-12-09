@@ -1,0 +1,19 @@
+Routing means 
+
+Routing basically means implementing different actions for different URLs.
+
+Building a routing.
+
+1. Analysis a URL. 
+
+
+CMD 1 : npm outdated
+CMD 2 : npm update
+CMD 3 : npm uninstall
+
+
+Symbol Meaning 
+
+^ - default versions.
+~ - safer mode.
+* - all versions.
