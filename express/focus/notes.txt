@@ -1,0 +1,16 @@
+APIs on a higher level,
+
+- Introduce you to the REST Architecture.
+- Which is the most used API architecture today.
+
+REST
+
+- Representational States Transfer 
+- It is basically a way of building web APIs in a logical way, making them easy to consume.
+- We build RESTful APIs which means APIs following the REST Architecture, we just need to follow a couple of principles.
+
+1. Separate API into logical resources.
+2. Expose structured, resource-based URLs.
+3. Use  right method HTTP methods(verbs).
+4. Send data as JSON.
+5. Be stateless.
