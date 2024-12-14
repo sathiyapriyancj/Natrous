@@ -1,0 +1,21 @@
+Creating and Mounting Multiple Routers
+
+1. create multiple routers and use a process called mounting.
+
+Param Middleware 
+
+1. param middleware is middleware that only runs for certain parameters.
+
+2. So basically, when we have a certain parameter in our URL.
+
+3. Param Middleware When this id is present in the URL.
+
+4. Be careful with return else it continue cycle of request and response. (Note it is a pattern).
+
+5. we should always work with middleware stack.
+
+
+
+Real use case : 
+
+1. Validate a id of user instead of define a single method in controller. 
