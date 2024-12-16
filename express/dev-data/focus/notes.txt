@@ -1,21 +1,13 @@
-Creating and Mounting Multiple Routers
+Environment Variables
 
-1. create multiple routers and use a process called mounting.
+1. Node JS development in general.
 
-Param Middleware 
+2. Node JS can run different Environment either development or production.
 
-1. param middleware is middleware that only runs for certain parameters.
+3. Settings depends on development debugging on or off and login on or off the most important ones are development ones , there is other development a big team might use.
 
-2. So basically, when we have a certain parameter in our URL.
+4. Environment Variables are global Variables that are used to define the environment in which a node app is running.
 
-3. Param Middleware When this id is present in the URL.
-
-4. Be careful with return else it continue cycle of request and response. (Note it is a pattern).
-
-5. we should always work with middleware stack.
+5. Node JS itself actually sets a lot of environments.
 
 
-
-Real use case : 
-
-1. Validate a id of user instead of define a single method in controller. 
