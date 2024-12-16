@@ -1,0 +1,13 @@
+Environment Variables
+
+1. Node JS development in general.
+
+2. Node JS can run different Environment either development or production.
+
+3. Settings depends on development debugging on or off and login on or off the most important ones are development ones , there is other development a big team might use.
+
+4. Environment Variables are global Variables that are used to define the environment in which a node app is running.
+
+5. Node JS itself actually sets a lot of environments.
+
+
