@@ -1,143 +1,110 @@
-const { response, json } = require('express');
+const { response, json, request } = require('express');
 const Tour = require('./../models/tourModel');
+const APIFeatures = require('./../utils/apiFeatures');
 
-exports.getAllTours = async (request, response) => {
+exports.aliasTopTours = (req, res, next) => {
+  req.query.limit = '5';
+  req.query.sort = 'price';
+  req.query.fields = 'name,price,ratingsAverage';
+  next();
+};
+
+exports.getAllTours = async (req, res) => {
   try {
-    console.log(request.query);
+    const features = new APIFeatures(Tour.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
 
-    // 1. FILTERING
+    const tours = await features.query;
 
-    // Create a shallow copy of the query object
-    const queryObject = { ...request.query };
-
-    // Fields to exclude from the query object
-    const excludedFields = ['page', 'sort', 'limit', 'fields'];
-
-    // Remove excluded fields from the query object
-    excludedFields.forEach((field) => delete queryObject[field]);
-
-    // 2. ADVANCED FILTERING
-
-    // Mongodb Query { difficulty: 'easy', duration: { $gte: '5' } }
-
-    // URL Parameter { difficulty: 'easy', duration: { gte: '5' } }
-
-    // gte , gt , lte , lt
-
-    let queryStr = JSON.stringify(queryObject);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-
-    let query = Tour.find(JSON.parse(queryStr));
-
-    // Sorting
-    if (request.query.sort) {
-      const sortBy = request.query.sort.split(',').join(' ');
-
-      query = query.sort(sortBy);
-    } else {
-      // Default one
-      query = query.sort('-createdAt');
-    }
-
-    const tours = await query;
-
-    response.status(200).json({
+    res.status(200).json({
       status: 'success',
       data: {
         tours,
       },
     });
   } catch (error) {
-    response.status(500).json({
+    res.status(500).json({
       status: 'fail',
       message: error.message,
     });
   }
 };
 
-exports.getTour = async (request, response) => {
+exports.getTour = async (req, res) => {
   try {
-    const tour = await Tour.findById(request.params.id);
-    response.status(200).json({
+    const tour = await Tour.findById(req.params.id);
+    res.status(200).json({
       status: 'success',
       data: {
         tour,
       },
     });
   } catch (error) {
-    response.status(500).json({
+    res.status(500).json({
       status: 'fail',
       message: error.message,
     });
   }
 };
 
-exports.createTour = async (request, response) => {
+exports.createTour = async (req, res) => {
   try {
-    const newTour = await Tour.create(request.body);
-    response.status(201).json({
+    const newTour = await Tour.create(req.body);
+    res.status(201).json({
       status: 'success',
       data: {
         tour: newTour,
       },
     });
   } catch (error) {
-    response.status(400).json({
+    res.status(400).json({
       status: 'fail',
       message: error.message,
     });
   }
 };
 
-/*
-
-
-1. Ajax with try catch block 
-
-2. findByIdAndUpdate ()
-
-2. There are 3 parameters first one is id , second request body , third one we always want this method is to actually return that new document
-
-*/
-
-exports.updateTour = async (request, response) => {
+exports.updateTour = async (req, res) => {
   try {
-    const tour = await Tour.findByIdAndUpdate(request.params.id, request.body, {
+    const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
 
-    response.status(200).json({
+    res.status(200).json({
       status: 'success',
       data: {
         tour,
       },
     });
   } catch (error) {
-    response.status(500).json({
+    res.status(500).json({
       status: 'fail',
       message: error.message,
     });
   }
 };
 
-exports.deleteTour = async (request, response) => {
+exports.deleteTour = async (req, res) => {
   try {
-    const tour = await Tour.findByIdAndDelete(request.params.id);
+    const tour = await Tour.findByIdAndDelete(req.params.id);
 
     if (!tour) {
-      return response.status(404).json({
+      return res.status(404).json({
         status: 'fail',
         message: 'Tour not found',
       });
     }
 
-    response.status(204).json({
+    res.status(204).json({
       status: 'success',
       data: null,
     });
   } catch (error) {
-    response.status(500).json({
+    res.status(500).json({
       status: 'fail',
       message: error.message,
     });
