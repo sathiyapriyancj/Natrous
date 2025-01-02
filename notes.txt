@@ -1,3 +1,6 @@
-Errors Outside Express: Unhandled Rejections database rejection etc..
+Authorization: User Roles and Permissions
 
-1. Global way  
+1. each and every roles has a restrictions and Permissions.
+2. To perform that you need to add roles in models.
+3. You need to add roles in middleware.
+4. You need to add roles in routes.

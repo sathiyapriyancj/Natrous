@@ -16,6 +16,11 @@ const userSchema = new mongoose.Schema({
     validate: [validator.isEmail, 'Please provide a valid email'],
   },
   photo: String,
+  role: {
+    type: String,
+    enum: ['user', 'guide', 'lead-guide', 'admin'],
+    default: 'user',
+  },
   password: {
     type: String,
     required: [true, 'Please provide a password'],
@@ -32,6 +37,9 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords are not the same',
     },
   },
+  passwordChangedAt: {
+    type: Date, // Add this field to track when the password was changed
+  },
 });
 
 // Pre-save hook to hash password before saving
@@ -47,6 +55,7 @@ userSchema.pre('save', function (next) {
 
     this.password = hashedPassword;
     this.passwordConfirm = undefined; // Remove passwordConfirm after hashing
+    this.passwordChangedAt = Date.now(); // Set passwordChangedAt to the current date
     next();
   });
 });
@@ -57,6 +66,18 @@ userSchema.methods.correctPassword = async function (
   userPassword,
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+// Method to check if password was changed after JWT issuance
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = parseInt(
+      this.passwordChangedAt.getTime() / 1000,
+      10,
+    );
+    return JWTTimestamp < changedTimestamp;
+  }
+  return false;
 };
 
 const User = mongoose.model('User', userSchema);
