@@ -11,14 +11,8 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please tell us your email'],
     unique: true,
     lowercase: true,
-  },
-  email: {
-    type: String,
-    required: [true, 'Please tell us your email'],
-    unique: true,
-    lowercase: true,
     // Custom validator
-    validate: [validator, isEmail, 'Please provide a valid email'],
+    validate: [validator.isEmail, 'Please provide a valid email'],
   },
   photo: String,
   password: {
@@ -28,11 +22,11 @@ const userSchema = new mongoose.Schema({
   },
   passwordConfirm: {
     type: String,
-    required: [true, 'Please confirm tour password'],
+    required: [true, 'Please confirm your password'],
     minlength: 8,
   },
 });
 
-const User = mongoose.model('User', tourSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;
