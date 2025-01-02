@@ -20,6 +20,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please provide a password'],
     minlength: 8,
+    select: false,
   },
   passwordConfirm: {
     type: String,
@@ -33,23 +34,30 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-// Hash password before saving the user
+// Pre-save hook to hash password before saving
 userSchema.pre('save', function (next) {
   if (!this.isModified('password')) {
     return next();
   }
 
-  // Hash the password
   bcrypt.hash(this.password, 12, (err, hashedPassword) => {
     if (err) {
       return next(err);
     }
 
     this.password = hashedPassword;
-    this.passwordConfirm = undefined; // Remove passwordConfirm field
+    this.passwordConfirm = undefined; // Remove passwordConfirm after hashing
     next();
   });
 });
+
+// Method to check if the password matches
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword,
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model('User', userSchema);
 
