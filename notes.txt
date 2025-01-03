@@ -34,8 +34,3 @@ to actually change the password, to actually change the password,
 3. Send it to user's email.
 
 
-How to send an Email using node-mailer
-
-1. install node-mailer.
-2. there steps to send an email
-3. staging and development use mailtrap
